@@ -1,6 +1,6 @@
 public class Node{
-    int key;
-    Node left, right;
+    public int key;
+    public Node left, right;
 
     public Node(int item)
     {
@@ -9,26 +9,26 @@ public class Node{
         left = right = null;
     }
 
-    public int getVal()
-    {
-        return key;
-    }
+    // public int getVal()
+    // {
+    //     return key;
+    // }
     
     //Children
-    public void setLeft(int item)
-    {
-        left = new Node(item);
-    }
-    public void setRight(int item)
-    {
-        right = new Node(item);
-    }
-    public Node getLeft()
-    {
-        return left;
-    }
-    public Node getRight()
-    {
-        return right;
-    }
+    // public void setLeft(int item)
+    // {
+    //     left = new Node(item);
+    // }
+    // public void setRight(int item)
+    // {
+    //     right = new Node(item);
+    // }
+    // public Node getLeft()
+    // {
+    //     return left;
+    // }
+    // public Node getRight()
+    // {
+    //     return right;
+    // }
 }
