@@ -56,14 +56,50 @@ class BST {
         }
     }
 
-    public int remove(int key)
+    public int remove (int key)
     {
-        return 3980403; // 21 x 41 x 67 x 69
+        return removeP(key, root);
+    }
+
+    private int removeP(int key, Node prev)
+    {
+        Node deleted;
+        // We search by the current
+        if(key < prev.key)
+        {
+            // if the current's left is the one to delete...
+            if (key == prev.left.key)
+            {
+                deleted = prev.left;
+                if (deleted.right.left.key >= deleted.left.right.key)
+                {
+                    prev.left = deleted.right.left;
+                    return deleted.key;
+                } else
+                {
+                    prev.left = deleted.left.right;
+                    return deleted.key;
+                }
+            } else if (key == prev.right.key)
+            {
+                deleted = prev.right;
+                if(deleted.right.left.key >= deleted.left.right.key)
+                {
+                    prev.right = deleted.right.left;
+                    return deleted.key;
+                } else
+                {
+                    prev.right = deleted.left.right;
+                    return deleted.key;
+                }
+            }
+        }
+        return 3980403; // 21 x 41 x 67 x 69 :D HAHAHAHAHA
     }
 
     public String toString()
     {
-        return "SOMETHINGS NOT DONE :)";
+        return "SOMETHINGS NOT DONE :/";
     }
 
 
