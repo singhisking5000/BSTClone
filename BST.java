@@ -95,42 +95,145 @@ class BST {
         Node prevToCurr = null;
         Node curr = root;
         Node toDelete;
-        Node prevOfRepl;
-        Node replacement;
-
-        // If we are trying to remove the root
-        if (curr.key == key)
+        Node prevToDel;
+        
+        // Start at the very root
+        if (root.key == key)
         {
-            if(curr == root)
+            prevToCurr = root;
+            if(root.left != null) // Check all children to the left
             {
-                toDelete = curr;
-                
-            }
-        }
-        if(curr.left != null)
-        {
-
-            replacement = curr.left;
-            prevOfRepl = curr;
-            // We look to the left, then ALL elements on the following right, except the last
-            while(replacement.right != null)
-            {
-                if(prevOfRepl == curr)
+                curr = root.left;
+                while (curr.right != null)
                 {
-                    prevOfRepl = prevOfRepl.left;
+                    prevToCurr = curr;
+                    curr = curr.right;
+                }
+
+                if (curr.left != null)
+                {
+                    prevToCurr.right = curr.left;
                 } else 
                 {
-                    prevOfRepl = prevOfRepl.right;
+                    prevToCurr.right = null;
                 }
-                replacement = replacement.right;
-            }
-            // If we reach an end, IF it has another element on ITS left, we want the one befores element to 
-
-            if(replacement.left != null)
+                curr.left = root.left;
+                curr.right = root.right;
+                root = curr;
+            } else if (root.right != null) // Check all children to the right
             {
-                prevOfRepl.right = replacement.left;
+                curr = root.right;
+                while (curr.left != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+                }
+                
+                if (curr.right != null)
+                {
+                    prevToCurr.left = curr.right;
+                } else 
+                {
+                    prevToCurr.left = null;
+                }
+                curr.left = root.left;
+                curr.right = root.right;
+                root = curr;
+            } else // If its LITERALLY just the root
+            {
+                root = null;
+            }
+        } else // Now what if the key ISNT in the root?
+        {
+            // SEARCH FOR DEM
+            prevToCurr = root;
+            if(key < root.key && root.left != null)
+            {
+                curr = root.left;
+            } 
+            if(key > root.key && root.right != null)
+            {
+                curr = root.right;
+            }
+
+            while (curr.left.key != key && curr.right.key != key)
+            {
+                if (key < curr.key && curr.left != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+                } 
+                if (key > curr.key && curr.right != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.right;
+                }
+            }
+
+            if(curr.left.key == key) // Is it the one on the left?
+            {
+                prevToCurr = curr;
+                prevToDel = curr;
+                curr = curr.left;
+                toDelete = curr;
+
+                if (toDelete.left != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+
+                    while (curr.right != null)
+                    {
+                        prevToCurr = curr;
+                        curr = curr.right;
+                    }
+
+                    if(curr.left != null)
+                    {
+                        prevToCurr.right = curr.left;
+                    } else
+                    {
+                        prevToCurr.right = null;
+                    }
+
+                    curr.left = toDelete.left;
+                    curr.right = toDelete.right;
+                    prevToDel.left = curr;
+                }
+            }
+            if(curr.right.key == key) // Is it the one on the left?
+            {
+                prevToCurr = curr;
+                prevToDel = curr;
+                curr = curr.left;
+                toDelete = curr;
+
+                if (toDelete.left != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+
+                    while (curr.right != null)
+                    {
+                        prevToCurr = curr;
+                        curr = curr.right;
+                    }
+
+                    if(curr.left != null)
+                    {
+                        prevToCurr.right = curr.left;
+                    } else
+                    {
+                        prevToCurr.right = null;
+                    }
+                    
+                    curr.left = toDelete.left;
+                    curr.right = toDelete.right;
+                    prevToDel.left = curr;
+                }
             }
         }
+
     }
 
     public String toString()
@@ -254,6 +357,44 @@ class BST {
                     prev.right = toDelete.left.right;
                     return toDelete.key;
                 }
+            }
+        }
+
+
+        // V2
+
+        
+        // If we 
+        
+        if (curr.left.key == key)
+        {
+            if(curr == root)
+            {
+                toDelete = curr;
+            }
+        }
+        if(curr.left != null)
+        {
+
+            replacement = curr.left;
+            prevOfRepl = curr;
+            // We look to the left, then ALL elements on the following right, except the last
+            while(replacement.right != null)
+            {
+                if(prevOfRepl == curr)
+                {
+                    prevOfRepl = prevOfRepl.left;
+                } else 
+                {
+                    prevOfRepl = prevOfRepl.right;
+                }
+                replacement = replacement.right;
+            }
+            // If we reach an end, IF it has another element on ITS left, we want the one befores element to 
+
+            if(replacement.left != null)
+            {
+                prevOfRepl.right = replacement.left;
             }
         }
 */
