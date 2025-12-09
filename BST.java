@@ -55,46 +55,82 @@ class BST {
             return false;
         }
     }
+    
 
-    public int remove (int key)
+    public Node searchWhere(int key)
     {
-        return removeP(key, root);
+        return searchWhereP(key, root);
     }
 
-    private int removeP(int key, Node prev)
-    {
-        Node deleted;
-        // We search by the current
-        if(key < prev.key)
+    private Node searchWhereP(int key, Node curr)
+    {  
+        if (curr.key == key) // If we found it, YIPPEE
         {
-            // if the current's left is the one to delete...
-            if (key == prev.left.key)
+            return curr;
+        } else if (key < curr.key && curr.left != null) // Maybe its to the left???
+        {
+            return searchWhereP(key, curr.left);
+        } else if (key > curr.key && curr.right != null) // MAYBE its the right...?
+        {
+            return searchWhereP(key, curr.right);
+        } else {
+            return null;
+        }
+    }
+
+    // public void remove(int key)
+    // {
+    //     Node deleteMe = searchWhere(key);
+    //     if(deleteMe != null)
+    //     {
+    //         return removeP(deleteMe);
+    //     } else 
+    //     {
+    //         return -1;
+    //     }
+    // }
+
+    public void remove(int key)
+    {
+        Node prevToCurr = null;
+        Node curr = root;
+        Node toDelete;
+        Node prevOfRepl;
+        Node replacement;
+
+        // If we are trying to remove the root
+        if (curr.key == key)
+        {
+            if(curr == root)
             {
-                deleted = prev.left;
-                if (deleted.right.left.key >= deleted.left.right.key)
-                {
-                    prev.left = deleted.right.left;
-                    return deleted.key;
-                } else
-                {
-                    prev.left = deleted.left.right;
-                    return deleted.key;
-                }
-            } else if (key == prev.right.key)
-            {
-                deleted = prev.right;
-                if(deleted.right.left.key >= deleted.left.right.key)
-                {
-                    prev.right = deleted.right.left;
-                    return deleted.key;
-                } else
-                {
-                    prev.right = deleted.left.right;
-                    return deleted.key;
-                }
+                toDelete = curr;
+                
             }
         }
-        return 3980403; // 21 x 41 x 67 x 69 :D HAHAHAHAHA
+        if(curr.left != null)
+        {
+
+            replacement = curr.left;
+            prevOfRepl = curr;
+            // We look to the left, then ALL elements on the following right, except the last
+            while(replacement.right != null)
+            {
+                if(prevOfRepl == curr)
+                {
+                    prevOfRepl = prevOfRepl.left;
+                } else 
+                {
+                    prevOfRepl = prevOfRepl.right;
+                }
+                replacement = replacement.right;
+            }
+            // If we reach an end, IF it has another element on ITS left, we want the one befores element to 
+
+            if(replacement.left != null)
+            {
+                prevOfRepl.right = replacement.left;
+            }
+        }
     }
 
     public String toString()
@@ -185,3 +221,39 @@ class BST {
     }
    };
 }
+
+
+
+/*
+        Node toDelete;
+        // We search by the current
+        if(key < prev.key)
+        {
+            // if the current's left is the one to delete...
+            if (key == prev.left.key)
+            {
+                toDelete = prev.left;
+                if (toDelete.right.left.key >= toDelete.left.right.key)
+                {
+                    prev.left = toDelete.right.left;
+                    return toDelete.key;
+                } else
+                {
+                    prev.left = toDelete.left.right;
+                    return toDelete.key;
+                }
+            } else if (key == prev.right.key)
+            {
+                toDelete = prev.right;
+                if(toDelete.right.left.key >= toDelete.left.right.key)
+                {
+                    prev.right = toDelete.right.left;
+                    return toDelete.key;
+                } else
+                {
+                    prev.right = toDelete.left.right;
+                    return toDelete.key;
+                }
+            }
+        }
+*/
