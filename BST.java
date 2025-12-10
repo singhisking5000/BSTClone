@@ -146,6 +146,7 @@ class BST {
         } else // Now what if the key ISNT in the root?
         {
             // SEARCH FOR DEM
+            // Starting at the root...
             prevToCurr = root;
             if(key < root.key && root.left != null)
             {
