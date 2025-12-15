@@ -1,7 +1,5 @@
 public class Main {
-    public static void main(String[] args)
-    {
-
+    public static void main(String[] args) {
         BST tree = new BST();
         tree.insert(5);
         tree.insert(1);
@@ -11,9 +9,16 @@ public class Main {
         tree.insert(2);
         tree.insert(4);
         tree.insert(3);
-        
         tree.printTree();
-
+        System.out.println("----------------------------------------------------")
+        ;
+        System.out.println("removing 5");
+        tree.remove(5);
+        tree.printTree();
+        System.out.println("----------------------------------------------------")
+        ;
+        tree.insert(5);
+        tree.printTree();
         System.out.println(tree.search(10));
         System.out.println(tree.search(9));
     }

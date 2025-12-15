@@ -1,30 +1,25 @@
 class BST {
     private Node root;
-
-    public BST()
-    {
-         root = null;
+    public BST() {
+        root = null;
     }
 
-    public void insert(int key)
-    {
+    public void insert(int key) {
         insertP(key, root);
     }
-
-    private void insertP(int key, Node curr){
-        //If its the first is empty
-        if(curr == null)
-        {
+    private void insertP(int key, Node curr) {
+            // If its the first is empty
+        if (curr == null) {
             curr = root = new Node(key);
         } else if (key < curr.key) // If the val belongs to the left...
         {
-            if (curr.left == null) // AND the left is empty, put left
-            {
-                curr.left = new Node(key);              
-            } else // If not empty, but we need to go that way, let us continue down again until
-            {
-                insertP(key, curr.left);
-            }
+        if (curr.left == null) // AND the left is empty, put left
+        {
+            curr.left = new Node(key);
+        } else // If not empty, but we need to go that way, let us continue down again until
+        {
+            insertP(key, curr.left);
+        }
         } else if (key > curr.key) // If val belongs to the right...
         {
             if (curr.right == null) // AND the right is empty, put right
@@ -37,11 +32,18 @@ class BST {
         }
     }
 
-    public boolean search (int key){
-        return searchP(key, root);
+
+    public boolean search(int key) {
+        if (root != null)
+        {
+            return searchP(key, root);
+        } else
+        {
+            return false;
+        }
     }
-    private boolean searchP(int key, Node curr)
-    {  
+
+    private boolean searchP(int key, Node curr) {
         if (curr.key == key) // If we found it, YIPPEE
         {
             return true;
@@ -55,62 +57,26 @@ class BST {
             return false;
         }
     }
-    
 
-    public Node searchWhere(int key)
-    {
-        return searchWhereP(key, root);
-    }
-
-    private Node searchWhereP(int key, Node curr)
-    {  
-        if (curr.key == key) // If we found it, YIPPEE
-        {
-            return curr;
-        } else if (key < curr.key && curr.left != null) // Maybe its to the left???
-        {
-            return searchWhereP(key, curr.left);
-        } else if (key > curr.key && curr.right != null) // MAYBE its the right...?
-        {
-            return searchWhereP(key, curr.right);
-        } else {
-            return null;
-        }
-    }
-
-    // public void remove(int key)
-    // {
-    //     Node deleteMe = searchWhere(key);
-    //     if(deleteMe != null)
-    //     {
-    //         return removeP(deleteMe);
-    //     } else 
-    //     {
-    //         return -1;
-    //     }
-    // }
-
-    public void remove(int key)
-    {
+    public void remove(int key) {
         Node prevToCurr = null;
         Node curr = root;
         Node toDelete;
         Node prevToDel;
-        
         // Start at the very root
-        if (root.key == key)
+        if (root.key == key) 
         {
             prevToCurr = root;
-            if(root.left != null) // Check all children to the left
+            if (root.left != null) // Check all children to the left
             {
                 curr = root.left;
-                while (curr.right != null)
+                while (curr.right != null) 
                 {
                     prevToCurr = curr;
                     curr = curr.right;
                 }
 
-                if (curr.left != null)
+                if (curr.left != null) 
                 {
                     prevToCurr.right = curr.left;
                 } else 
@@ -128,8 +94,7 @@ class BST {
                     prevToCurr = curr;
                     curr = curr.left;
                 }
-                
-                if (curr.right != null)
+                if (curr.right != null) 
                 {
                     prevToCurr.left = curr.right;
                 } else 
@@ -139,7 +104,7 @@ class BST {
                 curr.left = root.left;
                 curr.right = root.right;
                 root = curr;
-            } else // If its LITERALLY just the root
+            } else if (root.left == null && root.right == null)// If its LITERALLY just the root
             {
                 root = null;
             }
@@ -148,51 +113,92 @@ class BST {
             // SEARCH FOR DEM
             // Starting at the root...
             prevToCurr = root;
-            if(key < root.key && root.left != null)
+            if (key < root.key && root.left != null) 
             {
                 curr = root.left;
-            } 
-            if(key > root.key && root.right != null)
+            }
+            if (key > root.key && root.right != null) 
             {
                 curr = root.right;
             }
-
-            while (curr.left.key != key && curr.right.key != key)
+            while (curr.left.key != key && curr.right.key != key) 
             {
-                if (key < curr.key && curr.left != null)
+                if (key < curr.key && curr.left != null) 
                 {
                     prevToCurr = curr;
                     curr = curr.left;
-                } 
+                }
                 if (key > curr.key && curr.right != null)
                 {
                     prevToCurr = curr;
+                   curr = curr.right;
+                }
+            }
+            if (curr.left.key == key) // Is it the one on the left?
+            {
+                prevToCurr = curr;
+                prevToDel = curr;
+                curr = curr.left;
+                toDelete = curr;
+                if (toDelete.left != null) 
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+                    while (curr.right != null) 
+                    {
+                        prevToCurr = curr;
+                        curr = curr.right;
+                    }
+                    if (curr.left != null) 
+                    {
+                        prevToCurr.right = curr.left;
+                    } else
+                    {
+                        prevToCurr.right = null;
+                    }
+                    curr.left = toDelete.left;
+                    curr.right = toDelete.right;
+                    prevToDel.left = curr;
+                } else if (toDelete.right != null) 
+                {
+                    prevToCurr = curr;
                     curr = curr.right;
+                    while (curr.left != null) 
+                    {
+                        prevToCurr = curr;
+                        curr = curr.left;
+                    }
+                    if (curr.right != null) 
+                    {
+                        prevToCurr.left = curr.right;
+                    } else 
+                    {
+                        prevToCurr.left = null;
+                    }
+                    curr.left = toDelete.left;
+                    curr.right = toDelete.right;
+                    prevToDel.right = curr;
                 }
             }
-
-            if(curr.left.key == key) // Is it the one on the left?
+            if (curr.right.key == key) // Is it the one on the left?
             {
                 prevToCurr = curr;
                 prevToDel = curr;
-                curr = curr.left;
+                curr = curr.right;
                 toDelete = curr;
-
-                if (toDelete.left != null)
+                if (toDelete.left != null) 
                 {
                     prevToCurr = curr;
                     curr = curr.left;
-
-                    while (curr.right != null)
+                    while (curr.right != null) 
                     {
                         prevToCurr = curr;
                         curr = curr.right;
                     }
-
-                    if(curr.left != null)
+                    if (curr.left != null) 
                     {
                         prevToCurr.right = curr.left;
-                    } else
+                    } else 
                     {
                         prevToCurr.right = null;
                     }
@@ -200,58 +206,39 @@ class BST {
                     curr.left = toDelete.left;
                     curr.right = toDelete.right;
                     prevToDel.left = curr;
-                }
-            }
-            if(curr.right.key == key) // Is it the one on the left?
-            {
+                } else if (toDelete.right != null) 
+                {
                 prevToCurr = curr;
-                prevToDel = curr;
-                curr = curr.left;
-                toDelete = curr;
-
-                if (toDelete.left != null)
+                curr = curr.right;
+                while (curr.left != null) 
                 {
                     prevToCurr = curr;
                     curr = curr.left;
-
-                    while (curr.right != null)
-                    {
-                        prevToCurr = curr;
-                        curr = curr.right;
-                    }
-
-                    if(curr.left != null)
-                    {
-                        prevToCurr.right = curr.left;
-                    } else
-                    {
-                        prevToCurr.right = null;
-                    }
-                    
-                    curr.left = toDelete.left;
-                    curr.right = toDelete.right;
-                    prevToDel.left = curr;
+                }
+                if (curr.right != null) 
+                {
+                    prevToCurr.left = curr.right;
+                } else {
+                    prevToCurr.left = null;
+                }
+                curr.left = toDelete.left;
+                curr.right = toDelete.right;
+                prevToDel.right = curr;
                 }
             }
         }
-
     }
-
-    public String toString()
-    {
-        return "SOMETHINGS NOT DONE :/";
+    public String toString() {
+    return "SOMETHINGS NOT DONE :/";
     }
-
-
-
-
-
-
+    // Add the following functions to your BST
+    // Please use this code to verify your tree integrity
     //Add the following functions to your BST
-    //Please use this code to verify your tree integrity
+ //Please use this code to verify your tree integrity
     public boolean isBSTOrNot() {
         return isBSTOrNot(this.root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
+
     private boolean isBSTOrNot(Node root, int minValue, int maxValue) {
         // check for root is not null or not
         if (root == null) {
@@ -263,6 +250,9 @@ class BST {
         }
         return false;
     }
+
+ 
+
    // please use the following pieces of code to display your tree in a more easy to follow style (Note* you'll need to place the Trunk class in it's own file)
     public static void showTrunks(Trunk p)
     {
@@ -325,77 +315,3 @@ class BST {
     }
    };
 }
-
-
-
-/*
-        Node toDelete;
-        // We search by the current
-        if(key < prev.key)
-        {
-            // if the current's left is the one to delete...
-            if (key == prev.left.key)
-            {
-                toDelete = prev.left;
-                if (toDelete.right.left.key >= toDelete.left.right.key)
-                {
-                    prev.left = toDelete.right.left;
-                    return toDelete.key;
-                } else
-                {
-                    prev.left = toDelete.left.right;
-                    return toDelete.key;
-                }
-            } else if (key == prev.right.key)
-            {
-                toDelete = prev.right;
-                if(toDelete.right.left.key >= toDelete.left.right.key)
-                {
-                    prev.right = toDelete.right.left;
-                    return toDelete.key;
-                } else
-                {
-                    prev.right = toDelete.left.right;
-                    return toDelete.key;
-                }
-            }
-        }
-
-
-        // V2
-
-        
-        // If we 
-        
-        if (curr.left.key == key)
-        {
-            if(curr == root)
-            {
-                toDelete = curr;
-            }
-        }
-        if(curr.left != null)
-        {
-
-            replacement = curr.left;
-            prevOfRepl = curr;
-            // We look to the left, then ALL elements on the following right, except the last
-            while(replacement.right != null)
-            {
-                if(prevOfRepl == curr)
-                {
-                    prevOfRepl = prevOfRepl.left;
-                } else 
-                {
-                    prevOfRepl = prevOfRepl.right;
-                }
-                replacement = replacement.right;
-            }
-            // If we reach an end, IF it has another element on ITS left, we want the one befores element to 
-
-            if(replacement.left != null)
-            {
-                prevOfRepl.right = replacement.left;
-            }
-        }
-*/
