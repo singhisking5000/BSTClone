@@ -30,6 +30,8 @@ class BST {
                 insertP(key, curr.right);
             }
         }
+
+
     }
 
 
@@ -228,9 +230,46 @@ class BST {
             }
         }
     }
-    public String toString() {
-    return "SOMETHINGS NOT DONE :/";
+
+    public int balanceCheck(Node checkMe)
+    {
+        return 0;            
     }
+
+    public int getHeight(Node n)
+    {
+        return 1;
+    }
+
+
+    public String toString() {
+        return "SOMETHINGS NOT DONE :/";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Add the following functions to your BST
     // Please use this code to verify your tree integrity
     //Add the following functions to your BST
