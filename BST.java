@@ -31,7 +31,7 @@ class BST {
             }
         }
 
-
+        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
     }
 
 
@@ -234,13 +234,24 @@ class BST {
 
     public int balanceCheck(Node checkMe)
     {
-        return getHeight(checkMe.right) - getHeight(checkMe.left);    
+        if(checkMe == null)
+        {
+            return 0;
+        } else
+        {
+           return getHeight(checkMe.right) - getHeight(checkMe.left);     
+        }
     }
 
     private int getHeight(Node n)
     {
         int heightL = 0;
         int heightR = 0;
+
+        if(n == null)
+        {
+            return -1;
+        }
         if(n.left != null)
         {
             heightL = getHeight(n.left);

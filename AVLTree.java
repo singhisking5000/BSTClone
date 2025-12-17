@@ -1,7 +1,15 @@
 public class AVLTree extends BST
 {
-//  protected Node rotateRight(Node prev, Node sub) {
-//     //
-//   }
+    protected void rotateLeft(Node prev, Node targ) 
+    {
+        Node post = targ.right;
+        prev.right = post;
+        if(post.left != null)
+        {
+            targ.right = post.left;
+        }
+        post.left = targ;
+        
+    }
 
 }

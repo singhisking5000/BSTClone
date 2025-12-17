@@ -13,13 +13,11 @@ public class Main {
         tree.insert(-2);
         tree.insert(-3);
         tree.printTree();
-        System.out.println("----------------------------------------------------")
-        ;
+        System.out.println("----------------------------------------------------");
         System.out.println("removing 5");
         tree.remove(5);
         tree.printTree();
-        System.out.println("----------------------------------------------------")
-        ;
+        System.out.println("----------------------------------------------------");
         tree.insert(5);
         tree.printTree();
         
