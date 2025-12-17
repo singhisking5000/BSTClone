@@ -1,5 +1,5 @@
 class BST {
-    private Node root;
+    public Node root;
     public BST() {
         root = null;
     }
@@ -48,6 +48,7 @@ class BST {
     private boolean searchP(int key, Node curr) {
         if (curr.key == key) // If we found it, YIPPEE
         {
+            System.out.println(getHeight(curr));
             return true;
         } else if (key < curr.key && curr.left != null) // Maybe its to the left???
         {
@@ -233,12 +234,29 @@ class BST {
 
     public int balanceCheck(Node checkMe)
     {
-        return 0;            
+        return getHeight(checkMe.right) - getHeight(checkMe.left);    
     }
 
-    public int getHeight(Node n)
+    private int getHeight(Node n)
     {
-        return 1;
+        int heightL = 0;
+        int heightR = 0;
+        if(n.left != null)
+        {
+            heightL = getHeight(n.left);
+        }
+        if(n.right != null)
+        {
+            heightR = getHeight(n.right);
+        }
+
+        if(heightL > heightR)
+        {
+            return heightL + 1;
+        } else
+        {
+            return heightR + 1;
+        }
     }
 
 
