@@ -4,6 +4,9 @@ class BST {
         root = null;
     }
 
+    // !!! FOR BOTH insert() AND insertP()!!!
+    // Precondition: We have a tree, empty or not, and we require a key, which is the element we are going to insert
+    // Postcondition: The key is inserted into the tree in accordance to the rules placed by having a Binary Search Tree
     public void insert(int key) {
         insertP(key, root);
     }
@@ -35,6 +38,9 @@ class BST {
     }
 
 
+    // !!!FOR BOTH search() AND searchP()!!!
+    // Precondition: A tree exists, and we take in a key which we search for, telling us whether it exists in this tree or not
+    // Postcondition: Return true is the elemnt exists in the tree, false if not
     public boolean search(int key) {
         if (root != null)
         {
@@ -61,6 +67,8 @@ class BST {
         }
     }
 
+    // Precondition: Tree is formatted as normal, with all elements that were inserted still there. Takes in an int to delete in the tree
+    // Post condition: Int taken in will be deleted from the tree, with the appropiate node replacing it to make the tree still logical
     public void remove(int key) {
         Node prevToCurr = null;
         Node curr = root;
@@ -116,15 +124,18 @@ class BST {
             // SEARCH FOR DEM
             // Starting at the root...
             prevToCurr = root;
+            boolean direction = false; //False is left, true is right
             if (key < root.key && root.left != null) 
             {
+                direction = false;
                 curr = root.left;
             }
             if (key > root.key && root.right != null) 
             {
+                direction = true;
                 curr = root.right;
             }
-            while (curr.left.key != key && curr.right.key != key) 
+            while (curr.left != null && curr.left.key != key && curr.right != null && curr.right.key != key) 
             {
                 if (key < curr.key && curr.left != null) 
                 {
@@ -134,36 +145,119 @@ class BST {
                 if (key > curr.key && curr.right != null)
                 {
                     prevToCurr = curr;
-                   curr = curr.right;
+                    curr = curr.right;
                 }
             }
-            if (curr.left.key == key) // Is it the one on the left?
+            //no children
+            if(curr.left == null && curr.right == null) // No children?
             {
-                prevToCurr = curr;
-                prevToDel = curr;
-                curr = curr.left;
-                toDelete = curr;
-                if (toDelete.left != null) 
+                curr = null;
+                if(direction)
+                {
+                    prevToCurr.right = null;
+                }  else
+                {
+                    prevToCurr.left = null;
+                }
+            } else if(curr.left != null && curr.right == null) // Left Child only?
+            {
+                // If we only have a left child
+                if(direction)
+                {
+                    prevToCurr.right = curr.left;
+                    curr = null;
+                } else 
+                {
+                    prevToCurr.left = curr.left;
+                    curr = null;
+                }
+            } else if (curr.left == null && curr.right != null) // Right Child only?
+            {
+                if(direction)
+                {
+                    prevToCurr.right = curr.right;
+                    curr = null;
+                } else
+                {
+                    prevToCurr.left = curr.right;
+                    curr = null;
+                }
+            } else if (curr.left != null && curr.right != null) // Both children?
+            {
+                if (curr.left != null && curr.left.key == key) // Is it the one on the left?
                 {
                     prevToCurr = curr;
+                    prevToDel = curr;
                     curr = curr.left;
-                    while (curr.right != null) 
+                    toDelete = curr;
+                    if (toDelete.left != null) 
+                    {
+                        prevToCurr = curr;
+                        curr = curr.left;
+                        while (curr.right != null) 
+                        {
+                            prevToCurr = curr;
+                            curr = curr.right;
+                        }
+                        if (curr.left != null) 
+                        {
+                            prevToCurr.right = curr.left;
+                        } else
+                        {
+                            prevToCurr.right = null;
+                        }
+                        curr.left = toDelete.left;
+                        curr.right = toDelete.right;
+                        prevToDel.left = curr;
+                    } else if (toDelete.right != null) 
                     {
                         prevToCurr = curr;
                         curr = curr.right;
+                        while (curr.left != null) 
+                        {
+                            prevToCurr = curr;
+                            curr = curr.left;
+                        }
+                        if (curr.right != null) 
+                        {
+                            prevToCurr.left = curr.right;
+                        } else 
+                        {
+                            prevToCurr.left = null;
+                        }
+                        curr.left = toDelete.left;
+                        curr.right = toDelete.right;
+                        prevToDel.right = curr;
                     }
-                    if (curr.left != null) 
-                    {
-                        prevToCurr.right = curr.left;
-                    } else
-                    {
-                        prevToCurr.right = null;
-                    }
-                    curr.left = toDelete.left;
-                    curr.right = toDelete.right;
-                    prevToDel.left = curr;
-                } else if (toDelete.right != null) 
+                }
+                if (curr.right.key == key) // Is it the one on the left?
                 {
+                    prevToCurr = curr;
+                    prevToDel = curr;
+                    curr = curr.right;
+                    toDelete = curr;
+                    if (toDelete.left != null) 
+                    {
+                        prevToCurr = curr;
+                        curr = curr.left;
+                        while (curr.right != null) 
+                        {
+                            prevToCurr = curr;
+                            curr = curr.right;
+                        }
+                        if (curr.left != null) 
+                        {
+                            prevToCurr.right = curr.left;
+                        } else 
+                        {
+                            prevToCurr.right = null;
+                        }
+
+                        curr.left = toDelete.left;
+                        curr.right = toDelete.right;
+                        prevToDel.left = curr;
+                    } else if (toDelete.right != null) 
+                    {
                     prevToCurr = curr;
                     curr = curr.right;
                     while (curr.left != null) 
@@ -174,64 +268,21 @@ class BST {
                     if (curr.right != null) 
                     {
                         prevToCurr.left = curr.right;
-                    } else 
-                    {
+                    } else {
                         prevToCurr.left = null;
                     }
                     curr.left = toDelete.left;
                     curr.right = toDelete.right;
                     prevToDel.right = curr;
-                }
-            }
-            if (curr.right.key == key) // Is it the one on the left?
-            {
-                prevToCurr = curr;
-                prevToDel = curr;
-                curr = curr.right;
-                toDelete = curr;
-                if (toDelete.left != null) 
-                {
-                    prevToCurr = curr;
-                    curr = curr.left;
-                    while (curr.right != null) 
-                    {
-                        prevToCurr = curr;
-                        curr = curr.right;
                     }
-                    if (curr.left != null) 
-                    {
-                        prevToCurr.right = curr.left;
-                    } else 
-                    {
-                        prevToCurr.right = null;
-                    }
-
-                    curr.left = toDelete.left;
-                    curr.right = toDelete.right;
-                    prevToDel.left = curr;
-                } else if (toDelete.right != null) 
-                {
-                prevToCurr = curr;
-                curr = curr.right;
-                while (curr.left != null) 
-                {
-                    prevToCurr = curr;
-                    curr = curr.left;
-                }
-                if (curr.right != null) 
-                {
-                    prevToCurr.left = curr.right;
-                } else {
-                    prevToCurr.left = null;
-                }
-                curr.left = toDelete.left;
-                curr.right = toDelete.right;
-                prevToDel.right = curr;
                 }
             }
         }
     }
 
+
+    // Precondition: Tree exists, and we check the balance of a set node in the tree
+    // Postcondition: Returns an int that represents the balance of the branches on each side of the node (- means more left elements, + is more right elements)
     public int balanceCheck(Node checkMe)
     {
         if(checkMe == null)
@@ -243,6 +294,8 @@ class BST {
         }
     }
 
+    // Precondition: Requires a tree exists and a node to find the height of
+    // Postcondition: returns an int representing the height of the node we provide the function
     private int getHeight(Node n)
     {
         int heightL = 0;
@@ -271,6 +324,8 @@ class BST {
     }
 
 
+    // Precondition: Tree exists
+    // Postcondition: Returns a readable and easily formatted string that represents the tree and its branches.
     public String toString() {
         return "SOMETHINGS NOT DONE :/";
     }
