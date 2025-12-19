@@ -9,7 +9,5 @@ public class AVLTree extends BST
             targ.right = post.left;
         }
         post.left = targ;
-        
     }
-
 }

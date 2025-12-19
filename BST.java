@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+
 class BST {
     public Node root;
+    private ArrayList<String> elements = new ArrayList<String>();
     public BST() {
         root = null;
     }
@@ -298,36 +301,59 @@ class BST {
     // Postcondition: returns an int representing the height of the node we provide the function
     private int getHeight(Node n)
     {
-        int heightL = 0;
-        int heightR = 0;
-
         if(n == null)
         {
             return -1;
         }
-        if(n.left != null)
+        if(n.left == null && n.right == null)
         {
-            heightL = getHeight(n.left);
-        }
-        if(n.right != null)
-        {
-            heightR = getHeight(n.right);
+            return 0;
         }
 
-        if(heightL > heightR)
-        {
-            return heightL + 1;
-        } else
-        {
-            return heightR + 1;
-        }
+       return 1 + Math.max(getHeight(n.left), getHeight(n.right));
     }
 
 
     // Precondition: Tree exists
     // Postcondition: Returns a readable and easily formatted string that represents the tree and its branches.
     public String toString() {
-        return "SOMETHINGS NOT DONE :/";
+        
+        return "";
+    }
+
+    private ArrayList<String> getElements()
+    {
+        return getElementsP(root);
+    }
+    private ArrayList<String> getElementsP(Node curr)
+    {
+        elements.add(Integer.toString(curr.key));
+
+        elements.add(getChildren(curr));
+        if(curr.left.hasChildren())
+        {
+            getElementsP(curr.left);
+        }
+        return elements;
+    }
+    private String getChildren(Node n)
+    {
+        String toReturn = "";
+        if(n.left != null)
+        {
+            toReturn += n.left.key + ", ";
+        } else
+        {
+            toReturn += ", - ";
+        }
+        if(n.right != null)
+        {
+            toReturn += n.right.key + ", ";
+        } else
+        {
+            toReturn += ", - ";
+        }
+        return toReturn;
     }
 
 

@@ -9,26 +9,14 @@ public class Node{
         left = right = null;
     }
 
-    // public int getVal()
-    // {
-    //     return key;
-    // }
-    
-    //Children
-    // public void setLeft(int item)
-    // {
-    //     left = new Node(item);
-    // }
-    // public void setRight(int item)
-    // {
-    //     right = new Node(item);
-    // }
-    // public Node getLeft()
-    // {
-    //     return left;
-    // }
-    // public Node getRight()
-    // {
-    //     return right;
-    // }
+    public boolean hasChildren ()
+    {
+        if(this.left == null && this.right == null)
+        {
+            return false;
+        } else
+        {
+            return true;
+        }
+    }
 }
