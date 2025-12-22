@@ -37,7 +37,7 @@ class BST {
             }
         }
 
-        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
+        //System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
     }
 
 
@@ -128,29 +128,31 @@ class BST {
             // Starting at the root...
             prevToCurr = root;
             boolean direction = false; //False is left, true is right
-            if (key < root.key && root.left != null) 
+            System.out.println(curr.key);
+
+            // INFINITE LOOP BELOW vvvvvvvvvvvvvvvvvvvvvvvvv
+            while (curr.key!= key) 
             {
-                direction = false;
-                curr = root.left;
-            }
-            if (key > root.key && root.right != null) 
-            {
-                direction = true;
-                curr = root.right;
-            }
-            while (curr.left != null && curr.left.key != key && curr.right != null && curr.right.key != key) 
-            {
-                if (key < curr.key && curr.left != null) 
+                System.out.println("checking "+ curr.key);
+                if (key < curr.key && curr.left != null) // Do we belong left?
                 {
                     prevToCurr = curr;
                     curr = curr.left;
                 }
-                if (key > curr.key && curr.right != null)
+                if (key > curr.key && curr.right != null) // Do we belong right?
                 {
                     prevToCurr = curr;
                     curr = curr.right;
                 }
             }
+            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+            //found the right node to remove it's curr and the parent of it is prevToCurr
+            System.out.println("WE DONT GET THIS FAR");
+            System.out.println(prevToCurr.key + " --> " + curr.key);
+
+
             //no children
             if(curr.left == null && curr.right == null) // No children?
             {
@@ -317,43 +319,37 @@ class BST {
     // Precondition: Tree exists
     // Postcondition: Returns a readable and easily formatted string that represents the tree and its branches.
     public String toString() {
-        
-        return "";
-    }
-
-    private ArrayList<String> getElements()
-    {
-        return getElementsP(root);
-    }
-    private ArrayList<String> getElementsP(Node curr)
-    {
-        elements.add(Integer.toString(curr.key));
-
-        elements.add(getChildren(curr));
-        if(curr.left.hasChildren())
-        {
-            getElementsP(curr.left);
-        }
-        return elements;
-    }
-    private String getChildren(Node n)
-    {
+        //some way to store each "level" or nodes of the same depth
+        ArrayList<ArrayList<String>> layers = new ArrayList<>();
+        getElements(layers, root, getHeight(root));
         String toReturn = "";
-        if(n.left != null)
+        //traverse the layers and create one string representing the whole tree, use new lines to sepparate.
+        for(ArrayList<String> level : layers)
         {
-            toReturn += n.left.key + ", ";
-        } else
-        {
-            toReturn += ", - ";
-        }
-        if(n.right != null)
-        {
-            toReturn += n.right.key + ", ";
-        } else
-        {
-            toReturn += ", - ";
+            for(String s : level)
+            {
+                toReturn += s + " ";
+            }
+            toReturn += "\n";
         }
         return toReturn;
+    }
+
+    //do an in order traversal
+    private void getElements(ArrayList<ArrayList<String>> layers, Node curr, int depth)
+    {
+        if(curr == null){
+            layers.get(depth - 1).add("--");
+            return;
+        }
+
+        while(layers.size() <= depth){
+            layers.add(new ArrayList<>());
+        }
+        getElements(layers, curr.left, depth + 1);
+        layers.get(depth - 1).add(curr.key+"");
+
+        getElements(layers, curr.right, depth + 1);
     }
 
 
