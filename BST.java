@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 class BST {
     public Node root;
-    private ArrayList<String> elements = new ArrayList<String>();
     public BST() {
         root = null;
     }
@@ -130,8 +129,9 @@ class BST {
             boolean direction = false; //False is left, true is right
             System.out.println(curr.key);
 
+            //FIND WHERE IT IS
             // INFINITE LOOP BELOW vvvvvvvvvvvvvvvvvvvvvvvvv
-            while (curr.key!= key) 
+            while (curr.key != key) 
             {
                 System.out.println("checking "+ curr.key);
                 if (key < curr.key && curr.left != null) // Do we belong left?
@@ -146,14 +146,22 @@ class BST {
                 }
             }
             // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            // Now curr is the one to delete, and prevToCurr followed the path we took to get there
 
+            if(prevToCurr.left.key == curr.key)
+            {
+                direction = false;
+            } else if (prevToCurr.right.key == curr.key)
+            {
+                direction = true;
+            }
 
+            //Now the curr is the one to delete!
             //found the right node to remove it's curr and the parent of it is prevToCurr
-            System.out.println("WE DONT GET THIS FAR");
+            System.out.println("WE GET THIS FAR");
             System.out.println(prevToCurr.key + " --> " + curr.key);
 
-
-            //no children
+            //If the one we want to delete has NO CHILDREN
             if(curr.left == null && curr.right == null) // No children?
             {
                 curr = null;
@@ -164,7 +172,7 @@ class BST {
                 {
                     prevToCurr.left = null;
                 }
-            } else if(curr.left != null && curr.right == null) // Left Child only?
+            } else if(curr.left != null && curr.right == null) // Has a left child?
             {
                 // If we only have a left child
                 if(direction)
@@ -176,7 +184,7 @@ class BST {
                     prevToCurr.left = curr.left;
                     curr = null;
                 }
-            } else if (curr.left == null && curr.right != null) // Right Child only?
+            } else if (curr.left == null && curr.right != null) // Has a right child only?
             {
                 if(direction)
                 {
@@ -189,12 +197,13 @@ class BST {
                 }
             } else if (curr.left != null && curr.right != null) // Both children?
             {
-                if (curr.left != null && curr.left.key == key) // Is it the one on the left?
+                if (curr.left != null) // Is it the one on the left?
                 {
-                    prevToCurr = curr;
-                    prevToDel = curr;
-                    curr = curr.left;
                     toDelete = curr;
+                    prevToDel = prevToCurr;
+                    prevToCurr = curr;
+                    curr = curr.left;
+                    
                     if (toDelete.left != null) 
                     {
                         prevToCurr = curr;
