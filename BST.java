@@ -159,7 +159,7 @@ class BST {
             //Now the curr is the one to delete!
             //found the right node to remove it's curr and the parent of it is prevToCurr
             System.out.println("WE GET THIS FAR");
-            System.out.println(prevToCurr.key + " --> " + curr.key);
+            System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
 
             //If the one we want to delete has NO CHILDREN
             if(curr.left == null && curr.right == null) // No children?
@@ -197,99 +197,31 @@ class BST {
                 }
             } else if (curr.left != null && curr.right != null) // Both children?
             {
-                if (curr.left != null) // Is it the one on the left?
-                {
-                    toDelete = curr;
-                    prevToDel = prevToCurr;
-                    prevToCurr = curr;
-                    curr = curr.left;
+                //These... are hella important... please remember them :*(
+                System.out.println("we got to me");
+                toDelete = curr;
+                prevToDel = prevToCurr;
+                prevToCurr = curr;
+                curr = curr.left;
                     
-                    if (toDelete.left != null) 
-                    {
-                        prevToCurr = curr;
-                        curr = curr.left;
-                        while (curr.right != null) 
-                        {
-                            prevToCurr = curr;
-                            curr = curr.right;
-                        }
-                        if (curr.left != null) 
-                        {
-                            prevToCurr.right = curr.left;
-                        } else
-                        {
-                            prevToCurr.right = null;
-                        }
-                        curr.left = toDelete.left;
-                        curr.right = toDelete.right;
-                        prevToDel.left = curr;
-                    } else if (toDelete.right != null) 
-                    {
-                        prevToCurr = curr;
-                        curr = curr.right;
-                        while (curr.left != null) 
-                        {
-                            prevToCurr = curr;
-                            curr = curr.left;
-                        }
-                        if (curr.right != null) 
-                        {
-                            prevToCurr.left = curr.right;
-                        } else 
-                        {
-                            prevToCurr.left = null;
-                        }
-                        curr.left = toDelete.left;
-                        curr.right = toDelete.right;
-                        prevToDel.right = curr;
-                    }
-                }
-                if (curr.right.key == key) // Is it the one on the left?
+                while (curr.right != null) 
                 {
-                    prevToCurr = curr;
-                    prevToDel = curr;
-                    curr = curr.right;
-                    toDelete = curr;
-                    if (toDelete.left != null) 
-                    {
-                        prevToCurr = curr;
-                        curr = curr.left;
-                        while (curr.right != null) 
-                        {
-                            prevToCurr = curr;
-                            curr = curr.right;
-                        }
-                        if (curr.left != null) 
-                        {
-                            prevToCurr.right = curr.left;
-                        } else 
-                        {
-                            prevToCurr.right = null;
-                        }
-
-                        curr.left = toDelete.left;
-                        curr.right = toDelete.right;
-                        prevToDel.left = curr;
-                    } else if (toDelete.right != null) 
-                    {
+                    System.out.println("we dyiung in here");
                     prevToCurr = curr;
                     curr = curr.right;
-                    while (curr.left != null) 
-                    {
-                        prevToCurr = curr;
-                        curr = curr.left;
-                    }
-                    if (curr.right != null) 
-                    {
-                        prevToCurr.left = curr.right;
-                    } else {
-                        prevToCurr.left = null;
-                    }
-                    curr.left = toDelete.left;
-                    curr.right = toDelete.right;
-                    prevToDel.right = curr;
-                    }
                 }
+                    
+                if (curr.left != null) 
+                {
+                    prevToCurr.right = curr.left;
+                } else
+                {
+                    prevToCurr.right = null;
+                }
+                
+                curr.left = toDelete.left;
+                curr.right = toDelete.right;
+                prevToDel.left = curr; 
             }
         }
     }
