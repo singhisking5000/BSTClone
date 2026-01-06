@@ -36,7 +36,7 @@ class BST {
             }
         }
 
-        //System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
+        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
     }
 
 
@@ -122,18 +122,17 @@ class BST {
                 root = null;
             }
         } else // Now what if the key ISNT in the root?
-        {
+        
             // SEARCH FOR DEM
             // Starting at the root...
             prevToCurr = root;
             boolean direction = false; //False is left, true is right
-            System.out.println(curr.key);
+            // System.out.println(curr.key);
 
             //FIND WHERE IT IS
-            // INFINITE LOOP BELOW vvvvvvvvvvvvvvvvvvvvvvvvv
             while (curr.key != key) 
             {
-                System.out.println("checking "+ curr.key);
+                // System.out.println("checking "+ curr.key);
                 if (key < curr.key && curr.left != null) // Do we belong left?
                 {
                     prevToCurr = curr;
@@ -145,10 +144,9 @@ class BST {
                     curr = curr.right;
                 }
             }
-            // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             // Now curr is the one to delete, and prevToCurr followed the path we took to get there
 
-            System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
+            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
             if(prevToCurr.left == curr)
             {
                 direction = false;
@@ -159,8 +157,8 @@ class BST {
 
             //Now the curr is the one to delete!
             //found the right node to remove it's curr and the parent of it is prevToCurr
-            System.out.println("WE GET THIS FAR");
-            System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
+            // System.out.println("WE GET THIS FAR");
+            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
 
             //If the one we want to delete has NO CHILDREN
             if(curr.left == null && curr.right == null) // No children?
@@ -175,31 +173,70 @@ class BST {
                 }
             } else if(curr.left != null && curr.right == null) // Has a left child only?
             {
-                // If we only have a left child
-                if(direction)
+                toDelete = curr;
+                prevToDel = prevToCurr;
+                prevToCurr = curr;
+                curr = curr.left;
+                while(curr.right != null)
                 {
-                    prevToCurr.right = curr.left;
-                    curr = null;
-                } else 
-                {
-                    prevToCurr.left = curr.left;
-                    curr = null;
+                    prevToCurr = curr;
+                    curr = curr.right;
                 }
-            } else if (curr.left == null && curr.right != null) // Has a right child only?
-            {
+
+
                 if(direction)
                 {
-                    prevToCurr.right = curr.right;
-                    curr = null;
+                    prevToDel.right = curr;
                 } else
                 {
-                    prevToCurr.left = curr.right;
-                    curr = null;
+                    prevToDel.left = curr;
                 }
+
+                if(curr.left != null)
+                {
+                    prevToCurr.right = curr.left;
+                } else
+                {
+                    prevToCurr.right = null;
+                }
+
+                curr.left = toDelete.left;
+                toDelete = null;
+                curr = null;
+            } else if (curr.left == null && curr.right != null) // Has a right child only?
+            {
+                toDelete = curr;
+                prevToDel = prevToCurr;
+                prevToCurr = curr;
+                curr = curr.right;
+                while(curr.left != null)
+                {
+                    prevToCurr = curr;
+                    curr = curr.left;
+                }
+
+                if(direction)
+                {
+                    prevToDel.right = curr;
+                } else
+                {
+                    prevToDel.left = curr;
+                }
+
+                if(curr.right != null)
+                {
+                    prevToCurr.left = curr.right;
+                } else
+                {
+                    prevToCurr.left = null;
+                }
+
+                curr.right = toDelete.right;
+                toDelete = null;
+                curr = null;
             } else if (curr.left != null && curr.right != null) // Both children?
             {
                 //These... are hella important... please remember them :*(
-                System.out.println("Target was found, and he has 2 kids, but we dont care...");
                 toDelete = curr;
                 prevToDel = prevToCurr; // REMEMBER, the side that toDel is depends on DIRECTION (True for Right, False for Left)
                 prevToCurr = curr;
@@ -225,7 +262,7 @@ class BST {
                     b = curr
                 */
                 // We already did out left action, now we look ALL the way down the right of the left
-                System.out.println("BEFORE CHANGING REFERENCES\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
+                // System.out.println("BEFORE CHANGING REFERENCES\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
 
                 while (curr.right != null) 
                 {
@@ -252,7 +289,7 @@ class BST {
                     }
                 } else
                 {
-                    System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
+                    // System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
                     
                     if (curr.left != null)
                     {
@@ -273,65 +310,39 @@ class BST {
                         prevToDel.left = curr;
                     }
                 }
-                // if (curr.left != null) 
-                // {
-                //     if (prevToCurr == toDelete)
-                //     {
-                //         if (direction)
-                //         {
-                //             prevToDel.right = curr;
-                            
-                //         } else
-                //         {
-                //             prevToDel.left = curr;
-                //         }
-                //     } else
-                //     {
-                //         prevToCurr.right = curr.left;
-                //     }
-                // } else
-                // {
-                //     prevToCurr.right = null;
-                // }
-                // // We are having a reference problem here...
-                
-                // curr.left = toDelete.left;
-                // curr.right = toDelete.right;
-                // prevToDel.left = curr; 
-                // System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
             }
-        }
+        
     }
 
 
     // Precondition: Tree exists, and we check the balance of a set node in the tree
     // Postcondition: Returns an int that represents the balance of the branches on each side of the node (- means more left elements, + is more right elements)
-    // public int balanceCheck(Node checkMe)
-    // {
-    //     if(checkMe == null)
-    //     {
-    //         return 0;
-    //     } else
-    //     {
-    //        return getHeight(checkMe.right) - getHeight(checkMe.left);     
-    //     }
-    // }
+    public int balanceCheck(Node checkMe)
+    {
+        if(checkMe == null)
+        {
+            return 0;
+        } else
+        {
+           return getHeight(checkMe.right) - getHeight(checkMe.left);     
+        }
+    }
 
     // // Precondition: Requires a tree exists and a node to find the height of
     // // Postcondition: returns an int representing the height of the node we provide the function
-    // private int getHeight(Node n)
-    // {
-    //     if(n == null) //If we reach nothing, then we -1 just to keep the height one less as an index kind of variable
-    //     {
-    //         return -1;
-    //     }
-    //     if(n.left == null && n.right == null) //If we reach a nub, with literally no path, then we reached the end
-    //     {
-    //         return 0;
-    //     }
+    private int getHeight(Node n)
+    {
+        if(n == null) //If we reach nothing, then we -1 just to keep the height one less as an index kind of variable
+        {
+            return -1;
+        }
+        if(n.left == null && n.right == null) //If we reach a nub, with literally no path, then we reached the end
+        {
+            return 0;
+        }
 
-    //     return 1 + Math.max(getHeight(n.left), getHeight(n.right));
-    // }
+        return 1 + Math.max(getHeight(n.left), getHeight(n.right));
+    }
 
 
     // Precondition: Tree exists
@@ -339,7 +350,7 @@ class BST {
     public String toString() {
         //some way to store each "level" or nodes of the same depth
         ArrayList<ArrayList<String>> layers = new ArrayList<>();
-        // getElements(layers, root, getHeight(root));
+        getElements(layers, root, getHeight(root));
         String toReturn = "";
         //traverse the layers and create one string representing the whole tree, use new lines to sepparate.
         for(ArrayList<String> level : layers)
