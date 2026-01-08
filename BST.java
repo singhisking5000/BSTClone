@@ -69,6 +69,11 @@ class BST {
         }
     }
 
+    // public Node getNode (int key)
+    // {
+
+    // }
+
     // Precondition: Tree is formatted as normal, with all elements that were inserted still there. Takes in an int to delete in the tree
     // Post condition: Int taken in will be deleted from the tree, with the appropiate node replacing it to make the tree still logical
     public void remove(int key) {
@@ -311,7 +316,6 @@ class BST {
                     }
                 }
             }
-        
     }
 
 
