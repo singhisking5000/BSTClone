@@ -10,7 +10,6 @@ public class AVLTree extends BST
             root = post;
         } else
         {
-            // this code is buns... time to learn how to rotate...
             if (targ.right == null)
             {
                 System.out.println("ILLEGAL ROTATION");
@@ -56,9 +55,12 @@ public class AVLTree extends BST
             }
         }
     }
+    public void insert(int key){
+        insertP(key, root, null);
+    }
 
     // NOW OVERRIDE INSERT SO IT AUTOBALANCES ON INSERTS!
-    protected void insertP(int key, Node curr) {
+    protected void insertP(int key, Node curr, Node parent) {
             // If its the first is empty
         if (curr == null) {
             curr = root = new Node(key);
@@ -69,7 +71,7 @@ public class AVLTree extends BST
             curr.left = new Node(key);
         } else // If not empty, but we need to go that way, let us continue down again until
         {
-            insertP(key, curr.left);
+            insertP(key, curr.left, curr);
         }
         } else if (key > curr.key) // If val belongs to the right...
         {
@@ -78,14 +80,25 @@ public class AVLTree extends BST
                 curr.right = new Node(key);
             } else // if not, continue right
             {
-                insertP(key, curr.right);
+                insertP(key, curr.right,curr);
             }
         }
 
-        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pter exception through height check
+        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pointer exception through height check
         if(balanceCheck(curr) > 1)
         {
-            // WE got problems boys
+            if(balanceCheck(curr.right) < 0)
+            {
+                rotateRight(curr, curr.right);
+            }
+            rotateLeft(parent, curr);
+        } else if (balanceCheck(curr) < -1)
+        {
+             if(balanceCheck(curr.left) > 0)
+             {
+                rotateLeft(curr, curr.left);
+             }
+             rotateRight(parent, curr);
         }
     }
 }
