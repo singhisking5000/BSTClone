@@ -138,14 +138,13 @@ class BST {
             while (curr.key != key) 
             {
                 // System.out.println("checking "+ curr.key);
+                prevToCurr = curr;
                 if (key < curr.key && curr.left != null) // Do we belong left?
                 {
-                    prevToCurr = curr;
                     curr = curr.left;
                 }
                 if (key > curr.key && curr.right != null) // Do we belong right?
                 {
-                    prevToCurr = curr;
                     curr = curr.right;
                 }
             }

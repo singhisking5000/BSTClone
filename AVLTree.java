@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class AVLTree extends BST
 {
     protected void rotateLeft(Node prev, Node targ) 
@@ -84,7 +86,7 @@ public class AVLTree extends BST
             }
         }
 
-        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr)); //<-------- causing a null pointer exception through height check
+        System.out.println("At " + curr.key + ". Has a balance of " + balanceCheck(curr));
         if(balanceCheck(curr) > 1)
         {
             if(balanceCheck(curr.right) < 0)
@@ -100,5 +102,283 @@ public class AVLTree extends BST
              }
              rotateRight(parent, curr);
         }
+    }
+
+
+    public void remove(int key) {
+        Node prevToCurr = null;
+        Node curr = root;
+        Node toDelete;
+        Node prevToDel;
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(curr);
+
+        // Start at the very root
+        if (root.key == key) 
+        {
+            prevToCurr = root;
+            if (root.left != null) // Check all children to the left
+            {
+                curr = root.left;
+                while (curr.right != null) 
+                {
+                    nodes.add(curr);
+                    prevToCurr = curr;
+                    curr = curr.right;
+                }
+
+                if (curr.left != null) 
+                {
+                    prevToCurr.right = curr.left;
+                } else 
+                {
+                    prevToCurr.right = null;
+                }
+                curr.left = root.left;
+                curr.right = root.right;
+                root = curr;
+            } else if (root.right != null) // Check all children to the right
+            {
+                curr = root.right;
+                while (curr.left != null)
+                {
+                    nodes.add(curr);
+                    prevToCurr = curr;
+                    curr = curr.left;
+                }
+                if (curr.right != null) 
+                {
+                    prevToCurr.left = curr.right;
+                } else 
+                {
+                    prevToCurr.left = null;
+                }
+                curr.left = root.left;
+                curr.right = root.right;
+                root = curr;
+            } else if (root.left == null && root.right == null)// If its LITERALLY just the root
+            {
+                root = null;
+            }
+        } else {
+            // Now what if the key ISNT in the root?
+            // Starting at the root...
+            prevToCurr = root;
+            boolean direction = false; //False is left, true is right
+            // System.out.println(curr.key);
+
+            //FIND WHERE IT IS
+            while (curr.key != key) 
+            {
+                nodes.add(curr);
+                prevToCurr = curr;
+                if (key < curr.key && curr.left != null) // Do we belong left?
+                {
+                    curr = curr.left;
+                }
+                if (key > curr.key && curr.right != null) // Do we belong right?
+                {
+                    curr = curr.right;
+                }
+                nodes.add(curr);
+            }
+            // Now curr is the one to delete, and prevToCurr followed the path we took to get there
+
+            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
+            if(prevToCurr.left == curr)
+            {
+                direction = false;
+            } else if (prevToCurr.right == curr)
+            {
+                direction = true;
+            }
+
+            //Now the curr is the one to delete!
+            //found the right node to remove it's curr and the parent of it is prevToCurr
+            // System.out.println("WE GET THIS FAR");
+            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
+
+            //If the one we want to delete has NO CHILDREN
+            if(curr.left == null && curr.right == null) // No children?
+            {
+                curr = null;
+                if(direction)
+                {
+                    prevToCurr.right = null;
+                }  else
+                {
+                    prevToCurr.left = null;
+                }
+            } else if(curr.left != null && curr.right == null) // Has a left child only?
+            {
+                toDelete = curr;
+                prevToDel = prevToCurr;
+                prevToCurr = curr;
+                curr = curr.left;
+                while(curr.right != null)
+                {
+                    nodes.add(curr);
+                    prevToCurr = curr;
+                    curr = curr.right;
+                }
+
+                if(direction)
+                {
+                    prevToDel.right = curr;
+                } else
+                {
+                    prevToDel.left = curr;
+                }
+
+                if(curr.left != null)
+                {
+                    prevToCurr.right = curr.left;
+                } else
+                {
+                    prevToCurr.right = null;
+                }
+
+                curr.left = toDelete.left;
+                toDelete = null;
+                curr = null;
+            } else if (curr.left == null && curr.right != null) // Has a right child only?
+            {
+                toDelete = curr;
+                prevToDel = prevToCurr;
+                prevToCurr = curr;
+                curr = curr.right;
+                while(curr.left != null)
+                {
+                    nodes.add(curr);
+                    prevToCurr = curr;
+                    curr = curr.left;
+                }
+
+                if(direction)
+                {
+                    prevToDel.right = curr;
+                } else
+                {
+                    prevToDel.left = curr;
+                }
+
+                if(curr.right != null)
+                {
+                    prevToCurr.left = curr.right;
+                } else
+                {
+                    prevToCurr.left = null;
+                }
+
+                curr.right = toDelete.right;
+                toDelete = null;
+                curr = null;
+            } else if (curr.left != null && curr.right != null) // Both children?
+            {
+                //These... are hella important... please remember them :*(
+                toDelete = curr;
+                prevToDel = prevToCurr; // REMEMBER, the side that toDel is depends on DIRECTION (True for Right, False for Left)
+                prevToCurr = curr;
+                curr = curr.left; 
+
+                if (prevToDel.right == toDelete)
+                {
+                    direction = true;
+                }
+
+                // Gaurenteed not to be null, this is GOOD
+                /*  Our Search pattern.
+                            prevToDel
+                        /
+                    toDelete
+                    /       \
+                    ...     ...
+                    \       /
+                        a    ...
+                        \     /
+                        b  ...        
+                    a = prev to curr
+                    b = curr
+                */
+                // We already did out left action, now we look ALL the way down the right of the left
+                // System.out.println("BEFORE CHANGING REFERENCES\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
+
+                while (curr.right != null) 
+                {
+                    nodes.add(curr);
+                    // System.out.println("we dying in here");
+                    prevToCurr = curr;
+                    curr = curr.right;
+                }
+                    
+                // If we are removing 3, 5 needs to go to 2, 2 is curr right now, and 2.right --> 4
+                // SPECIAL CASE THAT CAN EASILY CAUSE ERRORS
+                if(prevToCurr == toDelete)
+                {
+                    if(toDelete.right != null)
+                    {
+                        curr.right = toDelete.right;
+                    }
+
+                    if(direction)
+                    {
+                        prevToDel.right = curr;
+                    } else
+                    {
+                        prevToDel.left = curr;
+                    }
+                } else
+                {
+                    // System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
+                    if (curr.left != null)
+                    {
+                        prevToCurr.right = curr.left;
+                    } else
+                    {
+                        prevToCurr.right = null;
+                    }
+                    
+                    curr.right = toDelete.right;
+                    curr.left = toDelete.left;
+                    
+                    if(direction)
+                    {
+                        prevToDel.right = curr;
+                    } else
+                    {
+                        prevToDel.left = curr;
+                    }
+                }
+            }
+        }
+
+        for (int i = nodes.size() - 1; i >= 0; i--)
+        {
+            Node n = nodes.get(i);
+
+            if(balanceCheck(n) > 1)
+            {
+                if(balanceCheck(n.right) < 0)
+                {
+                    
+                }
+            }
+        }
+
+        // if(balanceCheck(curr) > 1)
+        // {
+        //     if(balanceCheck(curr.right) < 0)
+        //     {
+        //         rotateRight(curr, curr.right);
+        //     }
+        //     rotateLeft(parent, curr);
+        // } else if (balanceCheck(curr) < -1)
+        // {
+        //      if(balanceCheck(curr.left) > 0)
+        //      {
+        //         rotateLeft(curr, curr.left);
+        //      }
+        //      rotateRight(parent, curr);
+        // }
     }
 }
