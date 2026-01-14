@@ -111,7 +111,6 @@ public class AVLTree extends BST
         Node toDelete;
         Node prevToDel;
         ArrayList<Node> nodes = new ArrayList<>();
-        nodes.add(curr);
 
         // Start at the very root
         if (root.key == key) 
@@ -180,7 +179,7 @@ public class AVLTree extends BST
                 {
                     curr = curr.right;
                 }
-                nodes.add(curr);
+
             }
             // Now curr is the one to delete, and prevToCurr followed the path we took to get there
 
@@ -352,16 +351,39 @@ public class AVLTree extends BST
             }
         }
 
+        for(Node n: nodes){
+            System.out.println(n.key);
+        }
+
         for (int i = nodes.size() - 1; i >= 0; i--)
         {
-            Node n = nodes.get(i);
+            Node n = nodes.get(i); //the node in question
+            Node p = null;
+
+            if(i >= 1)
+            {
+                p = nodes.get(i-1);
+            }
+            // if (i < nodes.size() - 1)
+            // {
+            //     c = nodes.get(i + 1);
+            // }
+
 
             if(balanceCheck(n) > 1)
             {
                 if(balanceCheck(n.right) < 0)
                 {
-                    
+                    rotateRight(n,  n.right);
                 }
+                rotateLeft(p, n);
+            } else if (balanceCheck(n) < -1)
+            {
+                if(balanceCheck(n.left) > 0)
+                {
+                    rotateLeft(n, n.left);
+                }
+                rotateRight(p, n);
             }
         }
 
