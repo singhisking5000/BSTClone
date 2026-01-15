@@ -2,7 +2,8 @@ import java.util.ArrayList;
 
 public class AVLTree extends BST
 {
-    protected void rotateLeft(Node prev, Node targ) 
+    //Takes 
+    private void rotateLeft(Node prev, Node targ) 
     {
         if(prev == null)
         {
@@ -30,7 +31,7 @@ public class AVLTree extends BST
         }
     }
 
-    protected void rotateRight(Node prev, Node targ)
+    private void rotateRight(Node prev, Node targ)
     {
         if (prev == null)
         {
@@ -57,6 +58,9 @@ public class AVLTree extends BST
             }
         }
     }
+
+    // BOTH PRE AND POST CONDITIONS APPLY TO insert() AND insertP()
+    // Precondition: The AVL tree exists
     public void insert(int key){
         insertP(key, root, null);
     }
