@@ -1,7 +1,8 @@
 public class Main {
     public static void main(String[] args) {
         AVLTree tree = new AVLTree();
-        //
+        // Please feel free to test anything you would like, I tried to organize this so that it was easier to see 
+        // before and after a removed item, but you can change that if you'd like.
         tree.insert(6);
         tree.insert(5);
         tree.insert(4);
@@ -9,9 +10,6 @@ public class Main {
         tree.insert(3);
         tree.insert(1);
         tree.insert(7);
-        // tree.insert();
-        // tree.insert();
-        // tree.insert(6);
         tree.printTree();
         System.out.println(tree);
         System.out.println("----------------------------------------------------");
@@ -21,18 +19,8 @@ public class Main {
         num = 2;
         tree.remove(num);
         System.out.println("Removing: " + num);
-        // tree.rotateLeft(tree.root.left.left, tree.root.left.left.left);
-        // tree.rotateRight(tree.root.left, tree.root.left.left);
-        // tree.rotateRight(tree.root, tree.root.left);
         tree.printTree();
         System.out.println(tree.toString());
         System.out.println("----------------------------------------------------");
-        //tree.insert(3);
-        // tree.printTree();
-        // System.out.println(tree.toString());
-        
-        // System.out.println("Current Tree Balance: " + tree.balanceCheck(tree.root));
-        // System.out.println(tree.search(10));
-        // System.out.println(tree.search(9));
     }
 }

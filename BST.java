@@ -69,11 +69,6 @@ class BST {
         }
     }
 
-    // public Node getNode (int key)
-    // {
-
-    // }
-
     // Precondition: Tree is formatted as normal, with all elements that were inserted still there. Takes in an int to delete in the tree
     // Post condition: Int taken in will be deleted from the tree, with the appropiate node replacing it to make the tree still logical
     public void remove(int key) {
@@ -126,18 +121,14 @@ class BST {
             {
                 root = null;
             }
-        } else // Now what if the key ISNT in the root?
-        
-            // SEARCH FOR DEM
+        } else {// Now what if the key ISNT in the root? we gotta findem
             // Starting at the root...
             prevToCurr = root;
             boolean direction = false; //False is left, true is right
-            // System.out.println(curr.key);
 
             //FIND WHERE IT IS
             while (curr.key != key) 
             {
-                // System.out.println("checking "+ curr.key);
                 prevToCurr = curr;
                 if (key < curr.key && curr.left != null) // Do we belong left?
                 {
@@ -148,9 +139,6 @@ class BST {
                     curr = curr.right;
                 }
             }
-            // Now curr is the one to delete, and prevToCurr followed the path we took to get there
-
-            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
             if(prevToCurr.left == curr)
             {
                 direction = false;
@@ -158,11 +146,6 @@ class BST {
             {
                 direction = true;
             }
-
-            //Now the curr is the one to delete!
-            //found the right node to remove it's curr and the parent of it is prevToCurr
-            // System.out.println("WE GET THIS FAR");
-            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
 
             //If the one we want to delete has NO CHILDREN
             if(curr.left == null && curr.right == null) // No children?
@@ -186,7 +169,6 @@ class BST {
                     prevToCurr = curr;
                     curr = curr.right;
                 }
-
 
                 if(direction)
                 {
@@ -240,7 +222,6 @@ class BST {
                 curr = null;
             } else if (curr.left != null && curr.right != null) // Both children?
             {
-                //These... are hella important... please remember them :*(
                 toDelete = curr;
                 prevToDel = prevToCurr; // REMEMBER, the side that toDel is depends on DIRECTION (True for Right, False for Left)
                 prevToCurr = curr;
@@ -251,31 +232,11 @@ class BST {
                     direction = true;
                 }
 
-                // Gaurenteed not to be null, this is GOOD
-                /*  Our Search pattern.
-                         prevToDel
-                        /
-                    toDelete
-                    /       \
-                   ...     ...
-                    \       /
-                     a    ...
-                      \     /
-                       b  ...        
-                    a = prev to curr
-                    b = curr
-                */
-                // We already did out left action, now we look ALL the way down the right of the left
-                // System.out.println("BEFORE CHANGING REFERENCES\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
-
                 while (curr.right != null) 
                 {
-                    // System.out.println("we dying in here");
                     prevToCurr = curr;
                     curr = curr.right;
                 }
-                   
-                // If we are removing 3, 5 needs to go to 2, 2 is curr right now, and 2.right --> 4
                 // SPECIAL CASE THAT CAN EASILY CAUSE ERRORS
                 if(prevToCurr == toDelete)
                 {
@@ -293,8 +254,6 @@ class BST {
                     }
                 } else
                 {
-                    // System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
-                    
                     if (curr.left != null)
                     {
                         prevToCurr.right = curr.left;
@@ -315,6 +274,7 @@ class BST {
                     }
                 }
             }
+        }
     }
 
 

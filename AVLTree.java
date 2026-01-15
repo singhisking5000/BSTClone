@@ -2,7 +2,10 @@ import java.util.ArrayList;
 
 public class AVLTree extends BST
 {
-    //Takes 
+    // Precondition: Our tree exists, and we are given a valid targ node (one that
+    // is not null).
+    // Postcondition: The target element is rotate to the left, as long as it is a
+    // legal rotation.
     private void rotateLeft(Node prev, Node targ) 
     {
         if(prev == null)
@@ -30,7 +33,11 @@ public class AVLTree extends BST
             }
         }
     }
-
+    
+    // Precondition: Our tree exists, and we are given a valid targ node (one that
+    // is not null).
+    // Postcondition: The target element is rotate to the right, as long as it is a
+    // legal rotation.
     private void rotateRight(Node prev, Node targ)
     {
         if (prev == null)
@@ -59,13 +66,17 @@ public class AVLTree extends BST
         }
     }
 
-    // BOTH PRE AND POST CONDITIONS APPLY TO insert() AND insertP()
-    // Precondition: The AVL tree exists
+    // -------------BOTH PRE AND POST CONDITIONS APPLY TO insert() AND insertP()-------------
+    // OVERRIDDED FUNCTION !!!!!!
+    // Precondition: The AVL tree exists and we are fed a valid key to create 
+    // a node.
+    // Postcondition: We add the element into the tree, whilst automatically 
+    // rotating the necessary elements to keep the tree balanced. 
     public void insert(int key){
         insertP(key, root, null);
     }
 
-    // NOW OVERRIDE INSERT SO IT AUTOBALANCES ON INSERTS!
+    // OVERRIDDED FUNCTION !!!!!!
     protected void insertP(int key, Node curr, Node parent) {
             // If its the first is empty
         if (curr == null) {
@@ -109,6 +120,12 @@ public class AVLTree extends BST
     }
 
 
+    // OVERRIDDED FUNCTION !!!!!!
+    // Precondition: Tree is formatted as normal, with all elements that were
+    // inserted still there. Takes in an int to delete in the tree
+    // Post condition: That item is removed from the tree and a replacement 
+    // is placed accordingly, with rotations throughout the tree if necessary 
+    // to keep it balanced.
     public void remove(int key) {
         Node prevToCurr = null;
         Node curr = root;
@@ -168,7 +185,6 @@ public class AVLTree extends BST
             // Starting at the root...
             prevToCurr = root;
             boolean direction = false; //False is left, true is right
-            // System.out.println(curr.key);
 
             //FIND WHERE IT IS
             while (curr.key != key) 
@@ -185,9 +201,7 @@ public class AVLTree extends BST
                 }
 
             }
-            // Now curr is the one to delete, and prevToCurr followed the path we took to get there
 
-            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
             if(prevToCurr.left == curr)
             {
                 direction = false;
@@ -196,12 +210,6 @@ public class AVLTree extends BST
                 direction = true;
             }
 
-            //Now the curr is the one to delete!
-            //found the right node to remove it's curr and the parent of it is prevToCurr
-            // System.out.println("WE GET THIS FAR");
-            // System.out.println("(Prev) " + prevToCurr.key + " --> " + curr.key + "(Curr)");
-
-            //If the one we want to delete has NO CHILDREN
             if(curr.left == null && curr.right == null) // No children?
             {
                 curr = null;
@@ -278,7 +286,6 @@ public class AVLTree extends BST
                 curr = null;
             } else if (curr.left != null && curr.right != null) // Both children?
             {
-                //These... are hella important... please remember them :*(
                 toDelete = curr;
                 prevToDel = prevToCurr; // REMEMBER, the side that toDel is depends on DIRECTION (True for Right, False for Left)
                 prevToCurr = curr;
@@ -289,32 +296,12 @@ public class AVLTree extends BST
                     direction = true;
                 }
 
-                // Gaurenteed not to be null, this is GOOD
-                /*  Our Search pattern.
-                            prevToDel
-                        /
-                    toDelete
-                    /       \
-                    ...     ...
-                    \       /
-                        a    ...
-                        \     /
-                        b  ...        
-                    a = prev to curr
-                    b = curr
-                */
-                // We already did out left action, now we look ALL the way down the right of the left
-                // System.out.println("BEFORE CHANGING REFERENCES\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
-
                 while (curr.right != null) 
                 {
                     nodes.add(curr);
-                    // System.out.println("we dying in here");
                     prevToCurr = curr;
                     curr = curr.right;
                 }
-                    
-                // If we are removing 3, 5 needs to go to 2, 2 is curr right now, and 2.right --> 4
                 // SPECIAL CASE THAT CAN EASILY CAUSE ERRORS
                 if(prevToCurr == toDelete)
                 {
@@ -332,7 +319,6 @@ public class AVLTree extends BST
                     }
                 } else
                 {
-                    // System.out.println("\ntoDel: " + toDelete.key + "\nprevToDel: " + prevToDel.key + "\nprevToCurr: " + prevToCurr.key + "\ncurr: " + curr.key);
                     if (curr.left != null)
                     {
                         prevToCurr.right = curr.left;
@@ -390,21 +376,5 @@ public class AVLTree extends BST
                 rotateRight(p, n);
             }
         }
-
-        // if(balanceCheck(curr) > 1)
-        // {
-        //     if(balanceCheck(curr.right) < 0)
-        //     {
-        //         rotateRight(curr, curr.right);
-        //     }
-        //     rotateLeft(parent, curr);
-        // } else if (balanceCheck(curr) < -1)
-        // {
-        //      if(balanceCheck(curr.left) > 0)
-        //      {
-        //         rotateLeft(curr, curr.left);
-        //      }
-        //      rotateRight(parent, curr);
-        // }
     }
 }
